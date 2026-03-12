@@ -192,7 +192,7 @@ def render_login_page():
 def _email_ui(t):
     txt   = t["text"]
     txt2  = t["text2"]
-    mode  = st.radio("", ["Sign In", "Create Account", "Forgot Password"],
+    mode  = st.radio("Select", ["Sign In", "Create Account", "Forgot Password"],
                      horizontal=True, label_visibility="collapsed", key="_email_mode")
 
     if mode == "Sign In":
