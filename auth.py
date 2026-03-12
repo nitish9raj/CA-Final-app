@@ -154,7 +154,7 @@ def render_login_page():
     """, unsafe_allow_html=True)
 
     method = st.radio("Login method", ["📧 Email", "📱 OTP", "🔗 Google"],
-                      horizontal=True, label_visibility="collapsed", key="_auth_method")
+                  horizontal=True, key="_auth_method")
 
     with st.container(border=True):
         if method == "📧 Email":
@@ -172,8 +172,8 @@ def render_login_page():
 
 def _email_ui(t):
     txt  = t["text"]
-    mode = st.radio("Mode", ["Sign In", "Create Account", "Forgot Password"],
-                    horizontal=True, label_visibility="collapsed", key="_email_mode")
+    mode = st.radio("Select", ["Sign In", "Create Account", "Forgot Password"],
+                horizontal=True, key="_email_mode")
 
     if mode == "Sign In":
         st.markdown(f"<p style='color:{txt};font-weight:700;font-size:16px;'>Welcome back 👋</p>", unsafe_allow_html=True)
