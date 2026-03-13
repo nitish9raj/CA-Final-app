@@ -221,58 +221,35 @@ def render_ai_insights():
                 padding:9px 18px; border-radius:24px; font-size:13px;
                 font-weight:800 !important; text-decoration:none!important;
                 cursor:pointer; white-space:nowrap; letter-spacing:0.01em;
-                line-height:1.3; border:none; transition:filter .15s,box-shadow .15s;
+                line-height:1.3;
             }}
             .dbtn-copy {{
-                background:{copy_bg}; color:{copy_col}!important;
-                border:1.5px solid {copy_brd}!important;
+                background:{copy_bg}; color:{copy_col};
+                border:1.5px solid {copy_brd};
             }}
-            .dbtn-copy:hover {{ border-color:{t['accent']}!important; color:{t['accent']}!important; }}
+            .dbtn-copy:hover {{ border-color:{t['accent']}; color:{t['accent']}; }}
             .dbtn-claude {{
                 background:linear-gradient(135deg,#6d28d9,#8b5cf6);
-                color:#ffffff!important;
+                color:#ffffff!important; border:none;
                 box-shadow:0 3px 14px rgba(109,40,217,0.5);
+                text-shadow:0 1px 2px rgba(0,0,0,0.25);
             }}
             .dbtn-claude:hover {{ filter:brightness(1.12); box-shadow:0 5px 20px rgba(109,40,217,0.6); }}
             .dbtn-chatgpt {{
                 background:linear-gradient(135deg,#059669,#047857);
-                color:#ffffff!important;
+                color:#ffffff!important; border:none;
                 box-shadow:0 3px 14px rgba(5,150,105,0.5);
+                text-shadow:0 1px 2px rgba(0,0,0,0.25);
             }}
             .dbtn-chatgpt:hover {{ filter:brightness(1.12); box-shadow:0 5px 20px rgba(5,150,105,0.6); }}
             .dbtn-gemini {{
                 background:linear-gradient(135deg,#1d4ed8,#2563eb);
-                color:#ffffff!important;
+                color:#ffffff!important; border:none;
                 box-shadow:0 3px 14px rgba(29,78,216,0.5);
+                text-shadow:0 1px 2px rgba(0,0,0,0.25);
             }}
             .dbtn-gemini:hover {{ filter:brightness(1.12); box-shadow:0 5px 20px rgba(29,78,216,0.6); }}
             </style>
-
-            <script>
-            function openWithClipboard(text, url) {{
-              // Copy to clipboard first, then open tab after clipboard write completes
-              if (navigator.clipboard && navigator.clipboard.writeText) {{
-                navigator.clipboard.writeText(text).then(function() {{
-                  window.open(url, '_blank');
-                }}).catch(function() {{
-                  // Fallback: legacy copy then open
-                  var ta = document.createElement('textarea');
-                  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
-                  document.body.appendChild(ta); ta.select();
-                  try {{ document.execCommand('copy'); }} catch(e) {{}}
-                  document.body.removeChild(ta);
-                  window.open(url, '_blank');
-                }});
-              }} else {{
-                var ta = document.createElement('textarea');
-                ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
-                document.body.appendChild(ta); ta.select();
-                try {{ document.execCommand('copy'); }} catch(e) {{}}
-                document.body.removeChild(ta);
-                window.open(url, '_blank');
-              }}
-            }}
-            </script>
 
             <div style="font-size:12px;color:{t['text2']};margin-bottom:8px;font-weight:500;">
               {hint_icon} {hint_msg}
@@ -282,20 +259,20 @@ def render_ai_insights():
                  onclick="navigator.clipboard.writeText({q_repr}).then(()=>{{this.textContent='✅ Copied!';setTimeout(()=>{{this.textContent='📋 Copy'}},1500)}});return false;">
                 📋 Copy
               </a>
+              <a class="dbtn dbtn-claude" href="{claude_url}" target="_blank" rel="noopener"
+                 onclick="try{{navigator.clipboard.writeText({q_repr})}}catch(e){{}}">
+                ◆ Ask Claude
+              </a>
               <a class="dbtn dbtn-chatgpt" href="{chatgpt_url}" target="_blank" rel="noopener">
                 ✦ Ask ChatGPT
               </a>
-              <a class="dbtn dbtn-claude" href="#"
-                 onclick="openWithClipboard({q_repr}, 'https://claude.ai/new'); return false;">
-                ◆ Ask Claude <span style="font-size:10px;opacity:0.75;">(pastes)</span>
-              </a>
-              <a class="dbtn dbtn-gemini" href="#"
-                 onclick="openWithClipboard({q_repr}, 'https://gemini.google.com/app'); return false;">
-                ✦ Ask Gemini <span style="font-size:10px;opacity:0.75;">(pastes)</span>
+              <a class="dbtn dbtn-gemini" href="{gemini_url}" target="_blank" rel="noopener"
+                 onclick="try{{navigator.clipboard.writeText({q_repr})}}catch(e){{}}">
+                ✦ Ask Gemini
               </a>
             </div>
-            <div style="font-size:10px;color:{t['text3']};margin-top:6px;line-height:1.6;">
-              ChatGPT auto-fills · Claude &amp; Gemini: question copied to clipboard → just press <b>Ctrl+V</b> (or ⌘V) to paste
+            <div style="font-size:10px;color:{t['text3']};margin-top:4px;">
+              Free · Opens in new tab · Question auto-fills in ChatGPT, Claude &amp; Gemini · Also copies to clipboard as backup
             </div>
             """, unsafe_allow_html=True)
 

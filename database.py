@@ -36,6 +36,21 @@ def init_db():
 #  Automatically appends  AND user_id = '{uid}'  to WHERE clauses.
 # ════════════════════════════════════════════════════════════
 @st.cache_data(ttl=15, show_spinner=False)
+
+def _parse_select_cols(query: str) -> list:
+    """Extract column names from SELECT clause for empty DataFrames."""
+    try:
+        m = re.search(r"SELECT\s+(.+?)\s+FROM", query, re.IGNORECASE)
+        if not m:
+            return []
+        cols_str = m.group(1).strip()
+        if cols_str == "*":
+            return []
+        cols = [c.strip().split(".")[-1].split(" ")[-1] for c in cols_str.split(",")]
+        return [c for c in cols if c]
+    except:
+        return []
+
 def fetch_data(query: str, params: tuple = ()) -> pd.DataFrame:
     uid = _uid()
     if not uid:
@@ -63,7 +78,12 @@ def fetch_data(query: str, params: tuple = ()) -> pd.DataFrame:
         q = _apply_order(q, query)
         q = _apply_limit(q, query)
         res = q.execute()
-        df  = pd.DataFrame(res.data) if res.data else pd.DataFrame()
+        if res.data:
+            df = pd.DataFrame(res.data)
+        else:
+            # Return empty DataFrame with correct columns from SELECT clause
+            cols = _parse_select_cols(query)
+            df = pd.DataFrame(columns=cols) if cols else pd.DataFrame()
         return df
 
     except Exception as e:
