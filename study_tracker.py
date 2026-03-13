@@ -283,6 +283,10 @@ def render_study_tracker():
             if df_sub.empty:
                 _load_topics(sub)
                 df_sub = db.fetch_data("SELECT status,confidence FROM topic_progress WHERE subject=?", (sub,))
+            if "status" not in df_sub.columns:
+                df_sub["status"] = "Not Started"
+            if "confidence" not in df_sub.columns:
+                df_sub["confidence"] = 0
             total  = len(df_sub)
             done   = len(df_sub[df_sub["status"]=="Completed"])
             pct    = round(done/total*100) if total else 0
@@ -404,7 +408,7 @@ def render_study_tracker():
                                 ["Not Started","In Progress","Completed"],
                                 index=["Not Started","In Progress","Completed"].index(status),
                                 key=f"pt_status_{tid}",
-                                label_visibility="collapsed")
+                                )
                             if new_status != status:
                                 auto_conf = max(conf, 70) if new_status=="Completed" else conf
                                 db.execute_query(
@@ -415,7 +419,7 @@ def render_study_tracker():
                         with r3:
                             st.markdown(f"<div style='font-size:11px;color:{t['text3']};padding-top:6px;'>Confidence: <b style='color:{conf_clr};'>{conf}%</b></div>", unsafe_allow_html=True)
                             new_conf = st.slider("conf", 0, 100, conf,
-                                key=f"pt_conf_{tid}", label_visibility="collapsed")
+                                key=f"pt_conf_{tid}")
                             if new_conf != conf:
                                 db.execute_query("UPDATE topic_progress SET confidence=? WHERE id=?", (new_conf, tid))
 
