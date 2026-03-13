@@ -146,7 +146,8 @@ def render_icai_library():
     if search_q.strip():
         df_f = df_f[df_f["title"].str.contains(search_q.strip(), case=False, na=False)]
 
-    st.markdown(f"<div style='font-size:12px;color:{t["text2"]};margin:8px 0;'>{len(df_f)} resource(s) shown</div>",
+    __text2 = t["text2"]
+    st.markdown(f"<div style='font-size:12px;color:{__text2};margin:8px 0;'>{len(df_f)} resource(s) shown</div>",
                 unsafe_allow_html=True)
 
     # ── Tabs

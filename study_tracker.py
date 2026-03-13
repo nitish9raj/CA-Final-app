@@ -92,7 +92,8 @@ def render_study_tracker():
 
         with col_form:
             with st.container(border=True):
-                st.markdown(f"<div style='font-size:15px;font-weight:700;color:{t['text']};margin-bottom:14px;'>Log a Study Session</div>", unsafe_allow_html=True)
+                __text = t["text"]
+                st.markdown(f"<div style='font-size:15px;font-weight:700;color:{__text};margin-bottom:14px;'>Log a Study Session</div>", unsafe_allow_html=True)
                 subject  = st.selectbox("Subject", SUBJECTS, key="st_sub")
                 category = st.selectbox("Category", CATEGORIES, key="st_cat")
                 col_d, col_h, col_m = st.columns(3)
@@ -113,7 +114,8 @@ def render_study_tracker():
 
         with col_recent:
             with st.container(border=True):
-                st.markdown(f"<div style='font-size:15px;font-weight:700;color:{t['text']};margin-bottom:12px;'>Quick Stats — Today</div>", unsafe_allow_html=True)
+                __text = t["text"]
+                st.markdown(f"<div style='font-size:15px;font-weight:700;color:{__text};margin-bottom:12px;'>Quick Stats — Today</div>", unsafe_allow_html=True)
                 today = datetime.now().strftime("%Y-%m-%d")
                 df_t = db.fetch_data(
                     "SELECT subject,category,duration_minutes FROM study_sessions WHERE date=? ORDER BY rowid DESC",
@@ -276,7 +278,8 @@ def render_study_tracker():
         </div>""", unsafe_allow_html=True)
 
         # ── Subject readiness cards ─────────────────────────
-        st.markdown(f"<div style='font-size:11px;font-weight:700;color:{t['text3']};text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;'>SUBJECT READINESS</div>", unsafe_allow_html=True)
+        __text3 = t["text3"]
+        st.markdown(f"<div style='font-size:11px;font-weight:700;color:{__text3};text-transform:uppercase;letter-spacing:2px;margin-bottom:10px;'>SUBJECT READINESS</div>", unsafe_allow_html=True)
         sub_cols = st.columns(6)
         for i, sub in enumerate(SUBJECTS):
             df_sub = db.fetch_data("SELECT status,confidence FROM topic_progress WHERE subject=?", (sub,))
@@ -321,7 +324,8 @@ def render_study_tracker():
                 # Add topic button row
                 col_hdr, col_add_btn = st.columns([5,1])
                 with col_hdr:
-                    st.markdown(f"<div style='font-size:14px;font-weight:700;color:{t['text']};padding:6px 0;'>{SUBJECT_ICONS[active_sub]} {SUBJECT_FULL[active_sub]}</div>", unsafe_allow_html=True)
+                    __text = t["text"]
+                    st.markdown(f"<div style='font-size:14px;font-weight:700;color:{__text};padding:6px 0;'>{SUBJECT_ICONS[active_sub]} {SUBJECT_FULL[active_sub]}</div>", unsafe_allow_html=True)
                 with col_add_btn:
                     if st.button("＋ Add", key=f"add_btn_{active_sub}", type="primary", use_container_width=True):
                         st.session_state[f"pt_show_add_{active_sub}"] = not st.session_state.get(f"pt_show_add_{active_sub}", False)
@@ -417,7 +421,8 @@ def render_study_tracker():
                                 st.rerun()
 
                         with r3:
-                            st.markdown(f"<div style='font-size:11px;color:{t['text3']};padding-top:6px;'>Confidence: <b style='color:{conf_clr};'>{conf}%</b></div>", unsafe_allow_html=True)
+                            __text3 = t["text3"]
+                            st.markdown(f"<div style='font-size:11px;color:{__text3};padding-top:6px;'>Confidence: <b style='color:{conf_clr};'>{conf}%</b></div>", unsafe_allow_html=True)
                             new_conf = st.slider("conf", 0, 100, conf,
                                 key=f"pt_conf_{tid}")
                             if new_conf != conf:
@@ -431,7 +436,8 @@ def render_study_tracker():
 
         # ── Radar chart overview ────────────────────────────
         st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
-        st.markdown(f"<div style='font-size:11px;font-weight:700;color:{t['text3']};text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;'>CONFIDENCE VS COMPLETION — ALL SUBJECTS</div>", unsafe_allow_html=True)
+        __text3 = t["text3"]
+        st.markdown(f"<div style='font-size:11px;font-weight:700;color:{__text3};text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;'>CONFIDENCE VS COMPLETION — ALL SUBJECTS</div>", unsafe_allow_html=True)
 
         radar_c1, radar_c2 = st.columns(2)
         with radar_c1:
@@ -470,7 +476,8 @@ def render_study_tracker():
 
         with radar_c2:
             with st.container(border=True):
-                st.markdown(f"<div style='font-size:13px;font-weight:700;color:{t['text']};margin-bottom:14px;'>All Subjects at a Glance</div>", unsafe_allow_html=True)
+                __text = t["text"]
+                st.markdown(f"<div style='font-size:13px;font-weight:700;color:{__text};margin-bottom:14px;'>All Subjects at a Glance</div>", unsafe_allow_html=True)
                 for sub in SUBJECTS:
                     dfx = db.fetch_data("SELECT status,confidence FROM topic_progress WHERE subject=?", (sub,))
                     if dfx.empty:

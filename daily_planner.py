@@ -28,7 +28,8 @@ def render_daily_planner():
         col_plan, col_prog = st.columns([1,1])
         with col_plan:
             with st.container(border=True):
-                st.markdown(f"<div style='font-size:15px;font-weight:700;color:{t['text']};margin-bottom:14px;'>📅 Plan for {date.today().strftime('%A, %d %B %Y')}</div>", unsafe_allow_html=True)
+                __text = t["text"]
+                st.markdown(f"<div style='font-size:15px;font-weight:700;color:{__text};margin-bottom:14px;'>📅 Plan for {date.today().strftime('%A, %d %B %Y')}</div>", unsafe_allow_html=True)
                 target_h = st.slider("Target Study Hours", 2.0, 16.0,
                     float(existing["target_hours"].iloc[0]) if not existing.empty and "target_hours" in existing.columns else 8.0, 0.5)
                 focus_subjects = st.multiselect("Focus Subjects", SUBJECTS, default=SUBJECTS[:2], key="plan_subs")
@@ -74,7 +75,8 @@ def render_daily_planner():
                 st.success("🏆 Daily target achieved!")
 
             if not df_t.empty:
-                st.markdown(f"<div style='margin-top:16px;font-size:13px;font-weight:600;color:{t['text']};margin-bottom:8px;'>Sessions today:</div>", unsafe_allow_html=True)
+                __text = t["text"]
+                st.markdown(f"<div style='margin-top:16px;font-size:13px;font-weight:600;color:{__text};margin-bottom:8px;'>Sessions today:</div>", unsafe_allow_html=True)
                 for s in df_t["subject"].unique():
                     m   = int(df_t[df_t["subject"] == s]["duration_minutes"].sum())
                     sc  = SC.get(str(s), t["accent"])
@@ -86,7 +88,8 @@ def render_daily_planner():
                     </div>""", unsafe_allow_html=True)
 
     with tabs[1]:
-        st.markdown(f"<div style='font-size:15px;font-weight:700;color:{t['text']};margin-bottom:14px;'>🤖 Smart Study Planner</div>", unsafe_allow_html=True)
+        __text = t["text"]
+        st.markdown(f"<div style='font-size:15px;font-weight:700;color:{__text};margin-bottom:14px;'>🤖 Smart Study Planner</div>", unsafe_allow_html=True)
         exam_str = st.session_state.get("exam_date","2026-05-01")
         try: days_left = max(1,(datetime.strptime(exam_str,"%Y-%m-%d")-datetime.now()).days)
         except: days_left = 100
@@ -124,7 +127,8 @@ def render_daily_planner():
         else:
             total_pending = int(df_pending["cnt"].sum())
             hrs_per_ch = total_available / total_pending if total_pending > 0 else 0
-            st.markdown(f"<div style='font-size:14px;font-weight:700;color:{t['text']};margin-bottom:12px;'>📋 Recommended Daily Allocation per Subject:</div>", unsafe_allow_html=True)
+            __text = t["text"]
+            st.markdown(f"<div style='font-size:14px;font-weight:700;color:{__text};margin-bottom:12px;'>📋 Recommended Daily Allocation per Subject:</div>", unsafe_allow_html=True)
             for _, row in df_pending.iterrows():
                 share   = row["cnt"] / total_pending if total_pending > 0 else 0
                 daily_h = share * daily_target_h
@@ -157,7 +161,8 @@ def render_daily_planner():
                 tgt2 = float(row["target_hours"]) if row["target_hours"] else 0
                 pct2 = min(actual_h2 / tgt2, 1.0) if tgt2 > 0 else 0
                 col2 = "#34d399" if pct2 >= 1 else "#fbbf24" if pct2 >= 0.6 else "#f87171"
-                note_html = f'<div style="font-size:11px;color:{t["text2"]};margin-top:2px;">{str(row["notes"])[:60]}</div>' if row["notes"] and len(str(row["notes"])) > 0 else ""
+                __text2 = t["text2"]
+                note_html = f'<div style="font-size:11px;color:{__text2};margin-top:2px;">{str(row["notes"])[:60]}</div>' if row["notes"] and len(str(row["notes"])) > 0 else ""
                 st.markdown(f"""
                 <div style="margin-bottom:8px;padding:12px 16px;background:{t['card']};
                      border:1px solid {t['border']};border-radius:12px;

@@ -55,7 +55,8 @@ def render_tests_analytics():
         col_f, col_h = st.columns([1,1])
         with col_f:
             with st.container(border=True):
-                st.markdown(f"<div style='font-size:15px;font-weight:700;color:{t['text']};margin-bottom:14px;'>Log a Mock Test</div>", unsafe_allow_html=True)
+                __text = t["text"]
+                st.markdown(f"<div style='font-size:15px;font-weight:700;color:{__text};margin-bottom:14px;'>Log a Mock Test</div>", unsafe_allow_html=True)
                 c1,c2 = st.columns(2)
                 subject   = c1.selectbox("Subject", SUBJECTS, key="ts_sub",
                     format_func=lambda s: f"{s} – {SUBJECT_FULL[s]}")
@@ -88,7 +89,8 @@ def render_tests_analytics():
 
         with col_h:
             with st.container(border=True):
-                st.markdown(f"<div style='font-size:15px;font-weight:700;color:{t['text']};margin-bottom:14px;'>Recent Test Results</div>", unsafe_allow_html=True)
+                __text = t["text"]
+                st.markdown(f"<div style='font-size:15px;font-weight:700;color:{__text};margin-bottom:14px;'>Recent Test Results</div>", unsafe_allow_html=True)
                 df_r = db.fetch_data("SELECT date,subject,marks_obtained,total_marks FROM mock_tests ORDER BY date DESC LIMIT 10")
                 if df_r.empty:
                     st.markdown(f"""
@@ -139,7 +141,8 @@ def render_tests_analytics():
             c4.metric("Last Score",  f"{df['pct'].iloc[-1]:.1f}%")
 
             with st.container(border=True):
-                st.markdown(f"<div style='font-size:14px;font-weight:700;color:{t['text']};margin-bottom:12px;'>Score Trend by Subject</div>", unsafe_allow_html=True)
+                __text = t["text"]
+                st.markdown(f"<div style='font-size:14px;font-weight:700;color:{__text};margin-bottom:12px;'>Score Trend by Subject</div>", unsafe_allow_html=True)
                 fig = go.Figure()
                 for subj in df["subject"].unique():
                     ds = df[df["subject"]==subj].sort_values("date")
@@ -164,7 +167,8 @@ def render_tests_analytics():
             col_bar, col_dist = st.columns(2)
             with col_bar:
                 with st.container(border=True):
-                    st.markdown(f"<div style='font-size:14px;font-weight:700;color:{t['text']};margin-bottom:12px;'>Average Score by Subject</div>", unsafe_allow_html=True)
+                    __text = t["text"]
+                    st.markdown(f"<div style='font-size:14px;font-weight:700;color:{__text};margin-bottom:12px;'>Average Score by Subject</div>", unsafe_allow_html=True)
                     sub_avg = df.groupby("subject")["pct"].mean().round(1)
                     fig2 = go.Figure(go.Bar(
                         x=sub_avg.index.tolist(), y=sub_avg.values.tolist(),
@@ -184,7 +188,8 @@ def render_tests_analytics():
 
             with col_dist:
                 with st.container(border=True):
-                    st.markdown(f"<div style='font-size:14px;font-weight:700;color:{t['text']};margin-bottom:12px;'>Score Distribution</div>", unsafe_allow_html=True)
+                    __text = t["text"]
+                    st.markdown(f"<div style='font-size:14px;font-weight:700;color:{__text};margin-bottom:12px;'>Score Distribution</div>", unsafe_allow_html=True)
                     bins_lbl = ["<40%","40-50%","50-60%","60-75%","75%+"]
                     bins_val = [
                         len(df[df["pct"]<40]),
@@ -216,7 +221,8 @@ def render_tests_analytics():
         if df_w.empty:
             st.info("Add weak areas when logging tests to see analysis here.")
         else:
-            st.markdown(f"<div style='font-size:15px;font-weight:700;color:{t['text']};margin-bottom:16px;'>Weak Area Analysis</div>", unsafe_allow_html=True)
+            __text = t["text"]
+            st.markdown(f"<div style='font-size:15px;font-weight:700;color:{__text};margin-bottom:16px;'>Weak Area Analysis</div>", unsafe_allow_html=True)
             for subj in SUBJECTS:
                 rows = df_w[df_w["subject"]==subj]
                 if rows.empty:
@@ -371,7 +377,8 @@ def render_tests_analytics():
             </div>""", unsafe_allow_html=True)
 
         # ── Per-subject circular rings from test log ───────
-        st.markdown(f"<div style='font-size:11px;font-weight:700;color:{t['text3']};text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;'>MOCK TEST SCORE PER SUBJECT (from your logged tests)</div>", unsafe_allow_html=True)
+        __text3 = t["text3"]
+        st.markdown(f"<div style='font-size:11px;font-weight:700;color:{__text3};text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;'>MOCK TEST SCORE PER SUBJECT (from your logged tests)</div>", unsafe_allow_html=True)
 
         sub_ring_cols = st.columns(6)
         for i, subj in enumerate(SUBJECTS):
@@ -396,7 +403,8 @@ def render_tests_analytics():
 
         with col_left:
             with st.container(border=True):
-                st.markdown(f"<div style='font-size:14px;font-weight:700;color:{t['text']};margin-bottom:14px;'>Score by Subject — Bar View</div>", unsafe_allow_html=True)
+                __text = t["text"]
+                st.markdown(f"<div style='font-size:14px;font-weight:700;color:{__text};margin-bottom:14px;'>Score by Subject — Bar View</div>", unsafe_allow_html=True)
                 for subj in SUBJECTS:
                     avg_s  = sub_scores[subj]
                     n_t    = sub_tests_count[subj]
@@ -419,7 +427,8 @@ def render_tests_analytics():
 
         with col_right:
             with st.container(border=True):
-                st.markdown(f"<div style='font-size:14px;font-weight:700;color:{t['text']};margin-bottom:14px;'>📌 AI Recommendations</div>", unsafe_allow_html=True)
+                __text = t["text"]
+                st.markdown(f"<div style='font-size:14px;font-weight:700;color:{__text};margin-bottom:14px;'>📌 AI Recommendations</div>", unsafe_allow_html=True)
                 recs = []
                 for subj in SUBJECTS:
                     avg_s = sub_scores[subj]
@@ -459,7 +468,8 @@ def render_tests_analytics():
         # ── Weekly study heatmap ───────────────────────────
         if not df_sess_all.empty:
             with st.container(border=True):
-                st.markdown(f"<div style='font-size:14px;font-weight:700;color:{t['text']};margin-bottom:14px;'>Weekly Study Hours — Last 8 Weeks</div>", unsafe_allow_html=True)
+                __text = t["text"]
+                st.markdown(f"<div style='font-size:14px;font-weight:700;color:{__text};margin-bottom:14px;'>Weekly Study Hours — Last 8 Weeks</div>", unsafe_allow_html=True)
                 df_s3 = df_sess_all.copy()
                 df_s3["date"] = pd.to_datetime(df_s3["date"])
                 df_s3["week"] = df_s3["date"].dt.isocalendar().week.astype(str)

@@ -17,7 +17,8 @@ def _section(title, sub=""):
     st.markdown(f"""
     <div style="margin-bottom:14px;">
         <div style="font-size:15px;font-weight:700;color:{t['text']};">{title}</div>
-        {f'<div style="font-size:12px;color:{t["text2"]};">{sub}</div>' if sub else ""}
+        __text2 = t["text2"]
+        {f'<div style="font-size:12px;color:{__text2};">{sub}</div>' if sub else ""}
     </div>""", unsafe_allow_html=True)
 
 def _card_bg(dark_col, light_col):
@@ -147,7 +148,7 @@ def render_ai_study_assistant():
                 uploaded = st.file_uploader(
                     "Drop your file here",
                     type=["pdf","docx","pptx","txt","png","jpg","jpeg"],
-                    key="file_upload", label_visibility="collapsed")
+                    key="file_upload")
                 subj_sel = st.selectbox("Subject (improves analysis)", SUBJECTS, key="up_subj")
                 up_nq    = st.number_input("Number of quiz questions to generate", min_value=1, max_value=500, value=10, step=1, key="up_nq",
                                            help="How many MCQs to generate after analysis (1–500)")
@@ -322,7 +323,7 @@ def render_ai_study_assistant():
             with st.container(border=True):
                 user_q = st.text_input("Ask a question…", key="chat_input",
                     placeholder="e.g. What are the key learning outcomes? What does section 2 cover?",
-                    label_visibility="collapsed")
+                    )
                 col_ask, col_clear = st.columns([4,1])
                 with col_ask:
                     ask_clicked = st.button("🔍 Ask", type="primary", use_container_width=True)
@@ -420,7 +421,7 @@ def render_ai_study_assistant():
 
                     if not was_right:
                         chosen = st.radio(f"Select answer for Q{i+1}", q["options"],
-                                          key=f"q_{i}", index=None, label_visibility="collapsed")
+                                          key=f"q_{i}", index=None)
                         if chosen is not None and chosen != prev:
                             st.session_state["quiz_answers"][i] = chosen
                             if chosen == q["answer"]:
