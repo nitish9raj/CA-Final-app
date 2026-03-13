@@ -68,7 +68,11 @@ def _render_rich_summary(summary, filename):
             for h in summary["headings"][:12]:
                 depth = h.get("depth",1)
                 indent = (depth-1)*16
-                st.markdown(f'<div style="padding:4px 0 4px {indent}px;color:{txt};font-size:{"14" if depth==1 else "12"}px;font-weight:{"700" if depth==1 else "500"};">{"▪" if depth==1 else "–"} {h["text"]}</div>', unsafe_allow_html=True)
+                _fsize = "14" if depth==1 else "12"
+                _fwgt  = "700" if depth==1 else "500"
+                _bullet = "▪" if depth==1 else "–"
+                _htext  = h["text"]
+                st.markdown(f'<div style="padding:4px 0 4px {indent}px;color:{txt};font-size:{_fsize}px;font-weight:{_fwgt};">{_bullet} {_htext}</div>', unsafe_allow_html=True)
 
     if summary.get("key_concepts"):
         st.markdown(f"<div style='font-size:13px;font-weight:700;color:{txt};margin:14px 0 8px;'>🔑 Key Concepts</div>", unsafe_allow_html=True)
@@ -415,8 +419,8 @@ def render_ai_study_assistant():
                         <div style="font-size:14px;font-weight:600;color:{txt_strong};margin-bottom:4px;">
                             Q{i+1}. {q['question']}
                         </div>
-                        {f'<div style="font-size:12px;color:#22c55e;margin-top:4px;">✅ Correct! <b>{q["answer"]}</b></div>' if was_right else ""}
-                        {f'<div style="font-size:12px;color:#ef4444;margin-top:4px;">❌ Wrong — Answer: <b>{q["answer"]}</b></div>' if is_ans and not was_right else ""}
+                        {'<div style="font-size:12px;color:#22c55e;margin-top:4px;">✅ Correct! <b>' + str(q.get("answer","")) + '</b></div>' if was_right else ""}
+                        {'<div style="font-size:12px;color:#ef4444;margin-top:4px;">❌ Wrong — Answer: <b>' + str(q.get("answer","")) + '</b></div>' if is_ans and not was_right else ""}
                     </div>""", unsafe_allow_html=True)
 
                     if not was_right:

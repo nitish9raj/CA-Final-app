@@ -88,7 +88,9 @@ def fetch_data(query: str, params: tuple = ()) -> pd.DataFrame:
 
     except Exception as e:
         print(f"[DB fetch_data] {e}  sql={query[:80]}")
-        return pd.DataFrame()
+        # Return empty DataFrame WITH correct columns so callers don't get KeyError
+        cols = _parse_select_cols(query)
+        return pd.DataFrame(columns=cols) if cols else pd.DataFrame()
 
 
 # ════════════════════════════════════════════════════════════

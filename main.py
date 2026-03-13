@@ -255,7 +255,7 @@ with st.sidebar:
          text-transform:uppercase;letter-spacing:2.5px;font-weight:700;">NAVIGATION</div>""",
     unsafe_allow_html=True)
 
-    choice = st.radio("nav", MENU_ITEMS, label_visibility="collapsed", key="nav_radio")
+    choice = st.radio("nav", MENU_ITEMS, key="nav_radio")
 
     # ── Stats chips ───────────────────────────────────────────
     ns = db.count_rows("study_sessions")

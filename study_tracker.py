@@ -49,11 +49,16 @@ def _ensure_topic_table():
 
 
 def _load_topics(subject):
+    _COLS = ["id", "topic_name", "estimated_hours", "status", "confidence"]
     _ensure_topic_table()
     df = db.fetch_data(
         "SELECT id,topic_name,estimated_hours,status,confidence FROM topic_progress WHERE subject=? ORDER BY id",
         (subject,))
-    if df.empty:
+    # Ensure correct columns even if DB returned empty/error DataFrame
+    for col in _COLS:
+        if col not in df.columns:
+            df[col] = None
+    if df.empty or df["status"].isna().all():
         for name, hrs in DEFAULT_TOPICS.get(subject, []):
             db.execute_query(
                 "INSERT INTO topic_progress (subject,topic_name,estimated_hours,status,confidence,added_date) VALUES (?,?,?,?,?,?)",
@@ -61,6 +66,9 @@ def _load_topics(subject):
         df = db.fetch_data(
             "SELECT id,topic_name,estimated_hours,status,confidence FROM topic_progress WHERE subject=? ORDER BY id",
             (subject,))
+        for col in _COLS:
+            if col not in df.columns:
+                df[col] = None
     return df
 
 
